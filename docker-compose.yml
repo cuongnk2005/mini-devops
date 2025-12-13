@@ -1,0 +1,9 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: devops-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+    restart: unless-stopped
