@@ -1,10 +1,90 @@
 <!doctype html>
-<html>
-<head><meta charset="utf-8"><title>Mini DevOps Demo</title></head>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>Mini DevOps Demo</title>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+      color: #f1f1f1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: rgba(0,0,0,0.45);
+      padding: 32px 40px;
+      border-radius: 14px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.45);
+      max-width: 520px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+      font-size: 28px;
+      color: #00e6ff;
+    }
+
+    .status {
+      display: inline-block;
+      margin: 12px 0;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #16a34a;
+      color: #eaffea;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .info {
+      margin-top: 16px;
+      font-size: 15px;
+      opacity: 0.95;
+      line-height: 1.6;
+    }
+
+    .footer {
+      margin-top: 22px;
+      font-size: 13px;
+      opacity: 0.7;
+    }
+
+    .footer span {
+      color: #00e6ff;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
 <body>
-  <h1>Mini DevOps Demo - Docker Nginx</h1>
-  <p>OK  kiet 1 2 3 4 5 6✅</p>
-  <p>Time: <span id="t"></span></p>
-  <script>document.getElementById("t").innerText = new Date().toString();</script>
+  <div class="card">
+    <h1>🚀 Mini DevOps Demo</h1>
+
+    <div class="status">DEPLOY SUCCESS</div>
+
+    <div class="info">
+      <p>Web chạy bằng <b>Docker + Nginx</b></p>
+      <p>Deploy tự động qua <b>Jenkins Pipeline</b></p>
+      <p>Source được pull từ <b>GitHub</b></p>
+    </div>
+
+    <div class="info">
+      <p><b>Build time:</b></p>
+      <p id="time"></p>
+    </div>
+
+    <div class="footer">
+      <p>CI/CD Flow: <span>Git → Jenkins → Docker → Nginx</span></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("time").innerText = new Date().toString();
+  </script>
 </body>
 </html>
