@@ -5,14 +5,14 @@ pipeline {
 
     stage('Checkout') {
       steps {
-        echo '📥 Lấy code từ GitHub...'
+        echo ' Lấy code từ GitHub...'
         checkout scm
       }
     }
 
     stage('Setup') {
       steps {
-        echo '⚙️ Kiểm tra môi trường...'
+        echo ' Kiểm tra môi trường...'
         sh '''
           set -e
           docker --version
@@ -24,7 +24,7 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        echo '🚀 Triển khai web...'
+        echo ' Triển khai web...'
         sh '''
           set -eux
           cd /srv/devops-demo
@@ -35,7 +35,7 @@ pipeline {
 
     stage('Monitor') {
       steps {
-        echo '🔍 Kiểm tra dịch vụ...'
+        echo ' Kiểm tra dịch vụ...'
         sh '''
           curl -fsS http://localhost >/dev/null
           echo "[OK] Web đang hoạt động"
@@ -47,10 +47,10 @@ pipeline {
 
   post {
     success {
-      echo '✅ PIPELINE THÀNH CÔNG – WEB ĐÃ ĐƯỢC CẬP NHẬT'
+      echo ' PIPELINE THÀNH CÔNG – WEB ĐÃ ĐƯỢC CẬP NHẬT'
     }
     failure {
-      echo '❌ PIPELINE THẤT BẠI – KIỂM TRA LOG'
+      echo 'PIPELINE THẤT BẠI – KIỂM TRA LOG'
     }
   }
 }
