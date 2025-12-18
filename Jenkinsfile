@@ -37,23 +37,25 @@ pipeline {
       }
     }
 
-    stage('Deploy') {
-      steps {
-        echo '[Deploy] Triển khai web'
-        sh '''
-          set -eux
-          mkdir -p "$LOG_DIR"
-          cd "$APP_DIR"
-          {
-            echo "== DEPLOY STAGE =="
-            echo "DATE: $(date)"
-            ls -la
-            test -x scripts/deploy.sh
-            ./scripts/deploy.sh
-          } | tee -a "$LOG_DIR/deploy.log"
-        '''
-      }
-    }
+   stage('Deploy') {
+  steps {
+    echo '[Deploy] Triển khai web'
+    sh '''
+      set -euxo pipefail
+
+      mkdir -p "$LOG_DIR"
+      cd "$APP_DIR"
+
+      {
+        echo "== DEPLOY STAGE =="
+        echo "DATE: $(date)"
+        ls -la
+        test -x scripts/deploy.sh
+        ./scripts/deploy.sh
+      } | tee -a "$LOG_DIR/deploy.log"
+    '''
+  }
+}
 
     stage('Monitor') {
       steps {
@@ -64,7 +66,7 @@ pipeline {
           {
             echo "== MONITOR STAGE =="
             echo "DATE: $(date)"
-            curl -v http://localhost
+           curl -fsS http://localhost >/dev/null
           } | tee -a "$LOG_DIR/monitor.log"
         '''
       }
