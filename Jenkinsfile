@@ -1,44 +1,64 @@
 pipeline {
   agent any
 
+  options {
+    timestamps()               // Gắn timestamp cho từng dòng log
+    ansiColor('xterm')         // Log dễ đọc (nếu có plugin)
+  }
+
+  environment {
+    APP_DIR = "/srv/devops-demo"
+    LOG_DIR = "/srv/devops-demo/logs"
+    PIPELINE_LOG = "/srv/devops-demo/logs/pipeline.log"
+  }
+
   stages {
 
     stage('Checkout') {
       steps {
-        echo ' Lấy code từ GitHub...'
+        echo '[Checkout] Lấy code từ GitHub'
         checkout scm
       }
     }
 
     stage('Setup') {
       steps {
-        echo ' Kiểm tra môi trường...'
+        echo '[Setup] Kiểm tra môi trường'
         sh '''
-          set -e
-          docker --version
-          docker compose version
-          echo "[OK] Môi trường sẵn sàng"
+          set -eux
+          mkdir -p logs
+          {
+            echo "== SETUP STAGE =="
+            docker --version
+            docker compose version
+          } | tee -a logs/setup.log
         '''
       }
     }
 
     stage('Deploy') {
       steps {
-        echo ' Triển khai web...'
+        echo '[Deploy] Triển khai web'
         sh '''
           set -eux
           cd /srv/devops-demo
-          ./scripts/deploy.sh
+          {
+            echo "== DEPLOY STAGE =="
+            ./scripts/deploy.sh
+          } | tee -a logs/deploy.log
         '''
       }
     }
 
     stage('Monitor') {
       steps {
-        echo ' Kiểm tra dịch vụ...'
+        echo '[Monitor] Kiểm tra dịch vụ'
         sh '''
-          curl -fsS http://localhost >/dev/null
-          echo "[OK] Web đang hoạt động"
+          set -eux
+          {
+            echo "== MONITOR STAGE =="
+            curl -v http://localhost
+          } | tee -a logs/monitor.log
         '''
       }
     }
@@ -47,10 +67,28 @@ pipeline {
 
   post {
     success {
-      echo ' PIPELINE THÀNH CÔNG – WEB ĐÃ ĐƯỢC CẬP NHẬT'
+      echo '[SUCCESS] Pipeline hoàn tất – Web hoạt động bình thường'
+      sh '''
+        echo "Pipeline SUCCESS at $(date)" >> /srv/devops-demo/logs/pipeline.log
+      '''
     }
+
     failure {
-      echo 'PIPELINE THẤT BẠI – KIỂM TRA LOG'
+      echo '[FAILURE] Pipeline thất bại – xem log chi tiết'
+      sh '''
+        echo "Pipeline FAILED at $(date)" >> /srv/devops-demo/logs/pipeline.log
+      '''
+    }
+
+    always {
+      echo '[POST] Tổng hợp log'
+      sh '''
+        {
+          echo "=============================="
+          echo "PIPELINE RUN AT $(date)"
+          echo "=============================="
+        } >> /srv/devops-demo/logs/pipeline.log
+      '''
     }
   }
 }
