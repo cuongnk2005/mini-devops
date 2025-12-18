@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   options {
-    timestamps()               // Timestamp cho từng dòng log
+    timestamps()
   }
 
   environment {
@@ -22,52 +22,54 @@ pipeline {
     stage('Setup') {
       steps {
         echo '[Setup] Kiểm tra môi trường'
-        sh '''
-          set -eux
+        sh '''#!/usr/bin/env bash
+          set -eu
           mkdir -p "$LOG_DIR"
-          {
-            echo "== SETUP STAGE =="
-            echo "DATE: $(date)"
-            echo "WHOAMI: $(whoami)"
-            echo "PWD: $(pwd)"
-            docker --version
-            docker compose version
-          } | tee -a "$LOG_DIR/setup.log"
+
+          echo "== SETUP =="
+          echo "DATE: $(date)"
+          echo "WHOAMI: $(whoami)"
+          echo "WORKSPACE: $(pwd)"
+          echo "APP_DIR: $APP_DIR"
+          echo "LOG_DIR: $LOG_DIR"
+
+          command -v docker >/dev/null
+          docker --version
+          docker compose version
         '''
       }
     }
 
-   stage('Deploy') {
-  steps {
-    echo '[Deploy] Triển khai web'
-    sh '''
-      set -euxo pipefail
+    stage('Deploy') {
+      steps {
+        echo '[Deploy] Triển khai web'
+        sh '''#!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$LOG_DIR"
+          cd "$APP_DIR"
 
-      mkdir -p "$LOG_DIR"
-      cd "$APP_DIR"
+          test -x scripts/deploy.sh
 
-      {
-        echo "== DEPLOY STAGE =="
-        echo "DATE: $(date)"
-        ls -la
-        test -x scripts/deploy.sh
-        ./scripts/deploy.sh
-      } | tee -a "$LOG_DIR/deploy.log"
-    '''
-  }
-}
+          # Chạy deploy (deploy.sh tự exit 1 nếu fail)
+          ./scripts/deploy.sh
+        '''
+      }
+    }
 
     stage('Monitor') {
       steps {
-        echo '[Monitor] Kiểm tra dịch vụ'
-        sh '''
-          set -eux
+        echo '[Monitor] Health-check web'
+        sh '''#!/usr/bin/env bash
+          set -euo pipefail
           mkdir -p "$LOG_DIR"
-          {
-            echo "== MONITOR STAGE =="
-            echo "DATE: $(date)"
-           curl -fsS http://localhost >/dev/null
-          } | tee -a "$LOG_DIR/monitor.log"
+
+          echo "== MONITOR =="
+          echo "DATE: $(date)"
+
+          # Yêu cầu HTTP 200 (curl -f sẽ fail nếu 403/404/500)
+          curl -fsS http://localhost >/dev/null
+
+          echo "HTTP OK ✅"
         '''
       }
     }
@@ -75,28 +77,46 @@ pipeline {
 
   post {
     success {
-      echo '[SUCCESS] Pipeline hoàn tất – Web hoạt động bình thường'
-      sh '''
+      echo '[SUCCESS] Pipeline hoàn tất'
+      sh '''#!/usr/bin/env bash
+        set -eu
         mkdir -p "$LOG_DIR"
-        echo "Pipeline SUCCESS at $(date)" | tee -a "$LOG_DIR/pipeline.log"
+        echo "[SUCCESS] $(date)" >> "$LOG_DIR/pipeline.log"
       '''
     }
 
     failure {
-      echo '[FAILURE] Pipeline thất bại – xem log chi tiết'
-      sh '''
+      echo '[FAILURE] Pipeline thất bại – tóm tắt lỗi'
+      sh '''#!/usr/bin/env bash
+        set -eu
         mkdir -p "$LOG_DIR"
-        echo "Pipeline FAILED at $(date)" | tee -a "$LOG_DIR/pipeline.log"
-        echo "---- Tail deploy.log ----" | tee -a "$LOG_DIR/pipeline.log"
-        tail -n 80 "$LOG_DIR/deploy.log" 2>/dev/null | tee -a "$LOG_DIR/pipeline.log" || true
-        echo "---- Tail monitor.log ----" | tee -a "$LOG_DIR/pipeline.log"
-        tail -n 80 "$LOG_DIR/monitor.log" 2>/dev/null | tee -a "$LOG_DIR/pipeline.log" || true
+
+        echo "[FAILURE] $(date)" >> "$LOG_DIR/pipeline.log"
+
+        echo "=== SUMMARY ==="
+        echo "Time: $(date)"
+        echo "APP_DIR: $APP_DIR"
+        echo "LOG_DIR: $LOG_DIR"
+
+        echo ""
+        echo "--- Deploy log (last 30 lines) ---"
+        tail -n 30 "$LOG_DIR/deploy.log" 2>/dev/null || echo "(deploy.log not found)"
+
+        echo ""
+        echo "--- Monitor log (last 20 lines) ---"
+        tail -n 20 "$LOG_DIR/monitor.log" 2>/dev/null || echo "(monitor.log not found)"
+
+        echo ""
+        echo "--- Key errors (deploy.log) ---"
+        grep -E "LỖI:|CẢNH BÁO:|ERROR|Forbidden|Connection refused|exit code" -n \
+          "$LOG_DIR/deploy.log" 2>/dev/null | tail -n 30 || echo "(no matched errors)"
       '''
     }
 
     always {
       echo '[POST] Kết thúc pipeline'
-      sh '''
+      sh '''#!/usr/bin/env bash
+        set -eu
         mkdir -p "$LOG_DIR"
         {
           echo "=============================="
