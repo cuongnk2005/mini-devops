@@ -4,6 +4,7 @@ pipeline {
   options {
     timestamps()
     ansiColor('xterm')   // cần ANSI Color plugin
+  skipDefaultCheckout(true)
   }
 
   environment {
@@ -13,12 +14,12 @@ pipeline {
 
   stages {
 
-    stage('Checkout') {
-      steps {
-        echo "\u001B[36m[Checkout]\u001B[0m Lấy code từ GitHub"
-        checkout scm
-      }
-    }
+   // stage('Checkout') {
+     // steps {
+       // echo "\u001B[36m[Checkout]\u001B[0m Lấy code từ GitHub"
+        // checkout scm
+    //  }
+   // }
 
     stage('Setup') {
       steps {
