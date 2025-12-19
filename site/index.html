@@ -1,85 +1,89 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Linux và Phần mềm nguồn mở</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        section {
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-            background: white;
-        }
-        h2 {
-            color: #2c3e50;
-        }
-        ul {
-            line-height: 1.8;
-        }
-        footer {
-            text-align: center;
-            background-color: #2c3e50;
-            color: white;
-            padding: 10px;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TechStore - Cửa hàng công nghệ</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <div class="logo">🛍️ TechStore</div>
+      <nav>
+        <a href="#home">Trang chủ</a>
+        <a href="#products">Sản phẩm</a>
+        <a href="#about">Về chúng tôi</a>
+        <a href="#contact">Liên hệ</a>
+        <button class="cart-btn" onclick="toggleCart()">
+          🛒 Giỏ hàng
+          <span class="cart-count" id="cart-count">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
 
-<header>
-    <h1>Linux và Phần mềm nguồn mở</h1>
-    <p>Môn học cơ sở về hệ điều hành và công nghệ mã nguồn mở</p>
-</header>
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <h1>🚀 Khám phá công nghệ mới nhất</h1>
+    <p>Những sản phẩm chất lượng cao với giá cả cạnh tranh</p>
+    <button class="hero-btn" onclick="scrollToProducts()">Xem sản phẩm</button>
+  </section>
 
-<section>
-    <h2>📘 Giới thiệu môn học</h2>
-    <p>
-        Môn học <strong>Linux và Phần mềm nguồn mở</strong> cung cấp cho sinh viên
-        các kiến thức nền tảng về hệ điều hành Linux, cách sử dụng,
-        quản trị hệ thống và tìm hiểu các phần mềm mã nguồn mở phổ biến.
-    </p>
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Products Section -->
+    <section id="products">
+      <h2 class="section-title">📱 Danh sách sản phẩm</h2>
+      <div class="products" id="products-grid">
+        <!-- Products will be generated here -->
+      </div>
+    </section>
 
-    <h2>🎯 Mục tiêu môn học</h2>
-    <ul>
-        <li>Hiểu được khái niệm hệ điều hành Linux</li>
-        <li>Sử dụng thành thạo các lệnh cơ bản trên Linux</li>
-        <li>Làm việc với phần mềm mã nguồn mở</li>
-        <li>Có khả năng triển khai các dịch vụ cơ bản trên Linux</li>
-    </ul>
+    <!-- Features Section -->
+    <section id="about">
+      <h2 class="section-title">✨ Tại sao chọn chúng tôi?</h2>
+      <div class="features">
+        <div class="feature-box">
+          <div class="feature-icon">🚚</div>
+          <div class="feature-title">Giao hàng nhanh</div>
+          <div class="feature-desc">Giao hàng trong 24-48 giờ toàn bộ thành phố</div>
+        </div>
+        <div class="feature-box">
+          <div class="feature-icon">💎</div>
+          <div class="feature-title">Chất lượng đảm bảo</div>
+          <div class="feature-desc">Tất cả sản phẩm đều chính hãng 100%</div>
+        </div>
+        <div class="feature-box">
+          <div class="feature-icon">💰</div>
+          <div class="feature-title">Giá cả hợp lý</div>
+          <div class="feature-desc">Giá tốt nhất thị trường, có khuyến mại hàng tuần</div>
+        </div>
+        <div class="feature-box">
+          <div class="feature-icon">🛡️</div>
+          <div class="feature-title">Hỗ trợ 24/7</div>
+          <div class="feature-desc">Đội ngũ hỗ trợ khách hàng sẵn sàng giúp đỡ</div>
+        </div>
+      </div>
+    </section>
+  </div>
 
-    <h2>🛠 Nội dung chính</h2>
-    <ul>
-        <li>Tổng quan về Linux</li>
-        <li>Cài đặt và cấu hình Linux</li>
-        <li>Lệnh cơ bản trong Terminal</li>
-        <li>Quản lý người dùng và phân quyền</li>
-        <li>Giới thiệu phần mềm nguồn mở</li>
-    </ul>
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="#home">Trang chủ</a>
+        <a href="#products">Sản phẩm</a>
+        <a href="#about">Về chúng tôi</a>
+        <a href="mailto:info@techstore.com">Email: info@techstore.com</a>
+        <a href="tel:+84123456789">Điện thoại: +84 123 456 789</a>
+      </div>
+      <p>&copy; 2025 TechStore. Tất cả quyền được bảo lưu.</p>
+    </div>
+  </footer>
 
-    <h2>📚 Ứng dụng thực tế</h2>
-    <p>
-        Linux và phần mềm nguồn mở được sử dụng rộng rãi trong:
-        máy chủ web, DevOps, điện toán đám mây, lập trình,
-        và các hệ thống doanh nghiệp.
-    </p>
-</section>
-
-<footer>
-    <p>© 2025 - Môn học Linux và Phần mềm nguồn mở</p>
-</footer>
-
+  <script src="script.js"></script>
 </body>
 </html>
