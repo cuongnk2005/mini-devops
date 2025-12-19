@@ -37,32 +37,26 @@ pipeline {
       }
     }
 
-    stage('Deploy') {
+   stage('Deploy') {
   steps {
-    echo 'Copy deploy.sh mới nhất sang server...'
+    echo "Copy deploy.sh mới nhất sang server..."
 
-    sh '''
+    sh '''#!/usr/bin/env bash
       set -euo pipefail
 
-      # Copy deploy.sh từ workspace sang thư mục chạy thật
-      cp -f scripts/deploy.sh /srv/devops-demo/deploy.sh
-      chmod +x /srv/devops-demo/deploy.sh
+      APP_DIR="/srv/devops-demo"
+      mkdir -p "$APP_DIR"
 
-      echo "\\033[36m[Deploy]\\033[0m Triển khai web từ Jenkins WORKSPACE"
-      
-      # Truyền WORKSPACE_DIR để deploy.sh copy từ workspace ra /srv/devops-demo/site
-      WORKSPACE_DIR="$WORKSPACE" \
-      SRC_SITE_DIR="site" \
-      SITE_DIR="/srv/devops-demo/site" \
-      CONTAINER_NAME="devopsdemo-nginx" \
-      COMPOSE_FILE="/srv/devops-demo/docker/docker-compose.yml" \
-      /srv/devops-demo/deploy.sh
+      cp -f scripts/deploy.sh "$APP_DIR/deploy.sh"
+      chmod +x "$APP_DIR/deploy.sh"
 
-      echo "\\033[32m[OK]\\033[0m Deploy stage done"
+      # Truyền workspace cho deploy.sh
+      export WORKSPACE_DIR="$WORKSPACE"
+
+      "$APP_DIR/deploy.sh"
     '''
   }
 }
-
     stage('Monitor') {
       steps {
         echo "\u001B[36m[Monitor]\u001B[0m Health-check web"
