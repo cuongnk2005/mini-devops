@@ -1,89 +1,265 @@
 <!doctype html>
 <html lang="vi">
 <head>
+  
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TechStore - Cửa hàng công nghệ</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Mini DevOps Demo</title>
+
+  <style>
+    :root{
+      --bg1:#0b1220; --bg2:#081a24; --card:rgba(255,255,255,.06);
+      --stroke:rgba(255,255,255,.12); --text:#eef2ff; --muted:rgba(238,242,255,.75);
+      --accent:#00e6ff; --good:#16a34a; --warn:#f59e0b;
+      --shadow: 0 24px 80px rgba(0,0,0,.55);
+      --r:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(1200px 600px at 20% 20%, rgba(0,230,255,.18), transparent 60%),
+        radial-gradient(900px 500px at 80% 30%, rgba(22,163,74,.16), transparent 55%),
+        linear-gradient(120deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    .wrap{width:min(980px, 92vw); padding:28px 0;}
+    .card{
+      position:relative;
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border:1px solid var(--stroke);
+      border-radius: calc(var(--r) + 6px);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+      transform: translateY(8px);
+      opacity:0;
+      animation: in .7s ease forwards;
+    }
+    .card:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(600px 220px at 30% 0%, rgba(0,230,255,.22), transparent 60%);
+      pointer-events:none;
+    }
+    @keyframes in{to{opacity:1; transform:translateY(0)}}
+
+    header{
+      display:flex; gap:16px; align-items:center; justify-content:space-between;
+      padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,.10);
+      margin-bottom:18px;
+    }
+    .title{display:flex; gap:12px; align-items:center;}
+    .logo{
+      width:44px; height:44px; border-radius:14px;
+      display:grid; place-items:center;
+      background: rgba(0,230,255,.12);
+      border:1px solid rgba(0,230,255,.25);
+      box-shadow: 0 10px 30px rgba(0,230,255,.12);
+      font-size:22px;
+    }
+    h1{margin:0; font-size:22px; letter-spacing:.2px;}
+    .sub{margin:2px 0 0; color:var(--muted); font-size:13px;}
+
+    .badges{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.25);
+      font-weight:700; font-size:12px;
+    }
+    .dot{width:9px; height:9px; border-radius:50%; background: var(--good); box-shadow:0 0 0 6px rgba(22,163,74,.15);}
+    .badge.secondary{opacity:.92}
+    .badge.secondary .dot{background: var(--accent); box-shadow:0 0 0 6px rgba(0,230,255,.12);}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media (max-width: 780px){
+      header{flex-direction:column; align-items:flex-start}
+      .badges{justify-content:flex-start}
+      .grid{grid-template-columns:1fr}
+    }
+
+    .panel{
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--r);
+      padding:16px;
+    }
+    .panel h2{
+      margin:0 0 10px;
+      font-size:14px; color:var(--accent);
+      letter-spacing:.3px;
+    }
+    ul{margin:0; padding:0 0 0 18px; color:var(--muted); line-height:1.7}
+    code{
+      padding:.12rem .35rem; border-radius:8px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.25);
+      color: rgba(238,242,255,.92);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+    .kv{display:grid; gap:10px}
+    .row{display:flex; justify-content:space-between; gap:10px; color:var(--muted); font-size:13px}
+    .row b{color:var(--text); font-weight:700}
+
+    .actions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:14px;
+    }
+    a.btn, button.btn{
+      appearance:none; border:none;
+      cursor:pointer;
+      text-decoration:none;
+      padding:10px 12px;
+      border-radius:12px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      color: var(--text);
+      font-weight:700; font-size:13px;
+      display:inline-flex; gap:8px; align-items:center;
+      transition: transform .08s ease, background .2s ease;
+    }
+    a.btn:hover, button.btn:hover{background: rgba(255,255,255,.12)}
+    a.btn:active, button.btn:active{transform: translateY(1px)}
+    .btn.primary{
+      background: rgba(0,230,255,.14);
+      border-color: rgba(0,230,255,.25);
+    }
+
+    .foot{
+      margin-top:16px;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.10);
+      color:rgba(238,242,255,.68);
+      font-size:12.5px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .pill{
+      padding:6px 10px; border-radius:999px;
+      background: rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .toast{
+      position: fixed; left: 50%; bottom: 18px;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(0,0,0,.70);
+      border: 1px solid rgba(255,255,255,.14);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      font-size: 13px;
+      backdrop-filter: blur(10px);
+    }
+    .toast.show{opacity:1; transform: translateX(-50%) translateY(0)}
+  </style>
 </head>
 
 <body>
-  <!-- Header -->
-  <header>
-    <div class="header-content">
-      <div class="logo">🛍️ TechStore</div>
-      <nav>
-        <a href="#home">Trang chủ</a>
-        <a href="#products">Sản phẩm</a>
-        <a href="#about">Về chúng tôi</a>
-        <a href="#contact">Liên hệ</a>
-        <button class="cart-btn" onclick="toggleCart()">
-          🛒 Giỏ hàng
-          <span class="cart-count" id="cart-count">0</span>
-        </button>
-      </nav>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <div class="title">
+          <div class="logo">🚀</div>
+          <div>
+            <h1>Mini DevOps Demo</h1>
+            <div class="sub">Trang demo CI/CD — deploy tự động bằng Jenkins + Docker + Nginx</div>
+          </div>
+        </div>
+
+        <div class="badges">
+          <div class="badge"><span class="dot"></span>DEPLOY SUCCESS</div>
+          <div class="badge secondary"><span class="dot"></span>PIPELINE ONLINE</div>
+        </div>
+      </header>
+
+      <div class="grid">
+        <section class="panel">
+          <h2>Hệ thống đang chạyysdfsfsádadeaesf</h2>
+          <ul>
+            <li>Web phục vụ bởi <b>Nginx</b> trong <b>Docker</b></li>
+            <li>Code được pull từ <b>GitHub</b> mỗi lần push</li>
+            <li>Jenkins Pipeline tự động build/deploy</li>
+            <li>Healthcheck: <code>curl -fsS http://localhost</code></li>
+          </ul>
+
+          <div class="actions">
+            <!-- ĐỔI 2 LINK NÀY THEO CỦA BẠN -->
+            <a class="btn primary" href="https://github.com/cuongnk2005/mini-devops" target="_blank" rel="noreferrer">🐙 GitHub Repo</a>
+            <a class="btn" href="http://localhost:8080" target="_blank" rel="noreferrer">🧩 Jenkins</a>
+
+            <button class="btn" id="copyBtn">📋 Copy build info</button>
+          </div>
+        </section>
+
+        <aside class="panel">
+          <h2>Build / Runtime</h2>
+          <div class="kv">
+            <div class="row"><span>Build time</span><b id="time">—</b></div>
+            <div class="row"><span>User agent</span><b id="ua">—</b></div>
+            <div class="row"><span>Page path</span><b id="path">—</b></div>
+            <div class="row"><span>Status</span><b>200 OK</b></div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="foot">
+        <div class="pill">CI/CD Flow: <b style="color:var(--accent)">Git → Jenkins → Docker → Nginx</b></div>
+        <div class="pill">Last updated: <b id="updated">—</b></div>
+      </div>
     </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero" id="home">
-    <h1>🚀 Khám phá công nghệ mới nhất</h1>
-    <p>Những sản phẩm chất lượng cao với giá cả cạnh tranh</p>
-    <button class="hero-btn" onclick="scrollToProducts()">Xem sản phẩm</button>
-  </section>
-
-  <!-- Main Content -->
-  <div class="container">
-    <!-- Products Section -->
-    <section id="products">
-      <h2 class="section-title">📱 Danh sách sản phẩm</h2>
-      <div class="products" id="products-grid">
-        <!-- Products will be generated here -->
-      </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="about">
-      <h2 class="section-title">✨ Tại sao chọn chúng tôi?</h2>
-      <div class="features">
-        <div class="feature-box">
-          <div class="feature-icon">🚚</div>
-          <div class="feature-title">Giao hàng nhanh</div>
-          <div class="feature-desc">Giao hàng trong 24-48 giờ toàn bộ thành phố</div>
-        </div>
-        <div class="feature-box">
-          <div class="feature-icon">💎</div>
-          <div class="feature-title">Chất lượng đảm bảo</div>
-          <div class="feature-desc">Tất cả sản phẩm đều chính hãng 100%</div>
-        </div>
-        <div class="feature-box">
-          <div class="feature-icon">💰</div>
-          <div class="feature-title">Giá cả hợp lý</div>
-          <div class="feature-desc">Giá tốt nhất thị trường, có khuyến mại hàng tuần</div>
-        </div>
-        <div class="feature-box">
-          <div class="feature-icon">🛡️</div>
-          <div class="feature-title">Hỗ trợ 24/7</div>
-          <div class="feature-desc">Đội ngũ hỗ trợ khách hàng sẵn sàng giúp đỡ</div>
-        </div>
-      </div>
-    </section>
   </div>
 
-  <!-- Footer -->
-  <footer id="contact">
-    <div class="footer-content">
-      <div class="footer-links">
-        <a href="#home">Trang chủ</a>
-        <a href="#products">Sản phẩm</a>
-        <a href="#about">Về chúng tôi</a>
-        <a href="mailto:info@techstore.com">Email: info@techstore.com</a>
-        <a href="tel:+84123456789">Điện thoại: +84 123 456 789</a>
-      </div>
-      <p>&copy; 2025 TechStore. Tất cả quyền được bảo lưu.</p>
-    </div>
-  </footer>
+  <div class="toast" id="toast">Copied ✅</div>
 
-  <script src="script.js"></script>
+  <script>
+    const now = new Date();
+    const timeEl = document.getElementById("time");
+    const uaEl = document.getElementById("ua");
+    const pathEl = document.getElementById("path");
+    const updatedEl = document.getElementById("updated");
+    const toast = document.getElementById("toast");
+
+    timeEl.textContent = now.toString();
+    updatedEl.textContent = now.toLocaleString();
+    uaEl.textContent = navigator.userAgent;
+    pathEl.textContent = location.pathname;
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(()=> toast.classList.remove("show"), 1200);
+    }
+
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      const text =
+`Mini DevOps Demo
+Build time: ${now.toString()}
+URL: ${location.href}
+UserAgent: ${navigator.userAgent}`;
+      try{
+        await navigator.clipboard.writeText(text);
+        showToast("Copied ✅");
+      }catch(e){
+        showToast("Copy failed ❌");
+      }
+    });
+  </script>
 </body>
 </html>
