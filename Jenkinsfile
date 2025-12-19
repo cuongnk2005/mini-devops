@@ -38,36 +38,30 @@ pipeline {
     }
 
     stage('Deploy') {
-      steps {
-        echo 'Copy file script mới nhất sang thư mục chạy...'
-        
-        // SỬA LỖI 2: Copy file và đặt tên rõ ràng để tránh nhầm lẫn
-        // Copy từ workspace (scripts/deploy.sh) sang server (/srv/devops-demo/deploy.sh)
-        sh 'cp scripts/deploy.sh /srv/devops-demo/deploy.sh'
-        sh 'chmod +x /srv/devops-demo/deploy.sh'
+  steps {
+    echo 'Copy deploy.sh mới nhất sang server...'
 
-        echo "\u001B[36m[Deploy]\u001B[0m Triển khai web"
-        sh '''#!/usr/bin/env bash
-          set -euo pipefail
-          
-          # Di chuyển vào thư mục ứng dụng
-          cd "$APP_DIR"
+    sh '''
+      set -euo pipefail
 
-          # SỬA LỖI 2: File giờ nằm ngay tại thư mục gốc, không phải trong folder scripts/ nữa
-          if [[ ! -x deploy.sh ]]; then
-            printf "\\033[31m[ERROR]\\033[0m Không tìm thấy file deploy.sh!\\n" >&2
-            exit 1
-          fi
+      # Copy deploy.sh từ workspace sang thư mục chạy thật
+      cp -f scripts/deploy.sh /srv/devops-demo/deploy.sh
+      chmod +x /srv/devops-demo/deploy.sh
 
-          printf "\\033[33m[INFO]\\033[0m Chạy deploy.sh...\\n"
-          
-          # Chạy file script (Lưu ý: ./deploy.sh chứ không phải ./scripts/deploy.sh)
-          ./deploy.sh
-          
-          printf "\\033[32m[OK]\\033[0m Deploy stage done\\n"
-        '''
-      }
-    }
+      echo "\\033[36m[Deploy]\\033[0m Triển khai web từ Jenkins WORKSPACE"
+      
+      # Truyền WORKSPACE_DIR để deploy.sh copy từ workspace ra /srv/devops-demo/site
+      WORKSPACE_DIR="$WORKSPACE" \
+      SRC_SITE_DIR="site" \
+      SITE_DIR="/srv/devops-demo/site" \
+      CONTAINER_NAME="devopsdemo-nginx" \
+      COMPOSE_FILE="/srv/devops-demo/docker/docker-compose.yml" \
+      /srv/devops-demo/deploy.sh
+
+      echo "\\033[32m[OK]\\033[0m Deploy stage done"
+    '''
+  }
+}
 
     stage('Monitor') {
       steps {
