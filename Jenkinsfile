@@ -59,19 +59,21 @@ pipeline {
         sh '''#!/usr/bin/env bash
           set -euo pipefail
           
-          echo "Đợi 5 giây cho Nginx khởi động..."
-          sleep 5
+          # 1. Tạo thư mục scripts (nếu chưa có)
+          mkdir -p "$APP_DIR/scripts"
 
-          echo "Kiểm tra kết nối..."
-          if curl -fsS http://localhost >/dev/null; then
-             printf "\\033[32m[OK]\u001B[0m Web trả về HTTP 200\\n"
-          else
-             printf "\\033[31m[FAIL]\u001B[0m Web không phản hồi\\n"
-             exit 1
-          fi
+          # 2. Copy file monitor vào đó
+          cp -f scripts/monitor.sh "$APP_DIR/scripts/monitor.sh"
+          
+          # 3. Cấp quyền chạy
+          chmod +x "$APP_DIR/scripts/monitor.sh"
+          
+          # 4. Chạy file monitor
+          "$APP_DIR/scripts/monitor.sh"
         '''
       }
     }
+
   }
 
   post {
