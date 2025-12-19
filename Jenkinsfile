@@ -14,35 +14,23 @@ pipeline {
 
   stages {
 
-   // stage('Checkout') {
-     // steps {
-       // echo "\u001B[36m[Checkout]\u001B[0m Lấy code từ GitHub"
-        // checkout scm
-    //  }
-   // }
-
-    stage('Setup') {
+   stage('Checkout') {
       steps {
-        echo "\u001B[36m[Setup]\u001B[0m Kiểm tra môi trường"
-        sh '''#!/usr/bin/env bash
-          set -eu
-          mkdir -p "$LOG_DIR"
+       echo "\u001B[36m[Checkout]\u001B[0m Lấy code từ GitHub"
+         checkout scm
+     }
+   }
 
-          {
-            echo "== SETUP =="
-            echo "DATE: $(date)"
-            echo "WHOAMI: $(whoami)"
-            echo "WORKSPACE: $(pwd)"
-            echo "APP_DIR: $APP_DIR"
-            echo "LOG_DIR: $LOG_DIR"
-            docker --version
-            docker compose version
-          } >> "$LOG_DIR/setup.log"
-
-          printf "\\033[32m[OK]\\033[0m Setup OK\\n"
-        '''
-      }
-    }
+   stage('Setup') {
+  steps {
+    echo "\u001B[36m[Setup]\u001B[0m Run scripts/setup.sh"
+    sh '''#!/usr/bin/env bash
+      set -euo pipefail
+      chmod +x scripts/setup.sh
+      ./scripts/setup.sh
+    '''
+  }
+}
 
     stage('Deploy') {
       steps {
