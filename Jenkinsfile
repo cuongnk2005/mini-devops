@@ -16,15 +16,11 @@ pipeline {
       steps {
         echo "\u001B[36m[Setup]\u001B[0m 1. Chạy script Setup..."
         
-        // --- SỬA LỖI Ở ĐÂY ---
-        // Phải tạo thư mục cha trước, nếu không lệnh cp sẽ lỗi
         sh 'mkdir -p /srv/devops-demo/scripts' 
         
-        // Sau đó mới copy file setup vào
         sh 'cp scripts/setup.sh /srv/devops-demo/scripts/setup.sh'
         sh 'chmod +x /srv/devops-demo/scripts/setup.sh'
         
-        // Chạy file
         sh '/srv/devops-demo/scripts/setup.sh'
       }
     }
@@ -36,10 +32,8 @@ pipeline {
         sh '''#!/usr/bin/env bash
           set -euo pipefail
 
-          # 1. Tạo thư mục scripts (Đúng)
           mkdir -p "$APP_DIR/scripts"
 
-          # 2. Copy vào thư mục scripts (Đúng)
           cp -f scripts/deploy.sh "$APP_DIR/scripts/deploy.sh"
           chmod +x "$APP_DIR/scripts/deploy.sh"
 
@@ -47,7 +41,6 @@ pipeline {
 
           echo "Đang khởi chạy deploy script..."
           
-          # 3. SỬA LẠI DÒNG NÀY: Phải gọi đúng đường dẫn file vừa copy
           "$APP_DIR/scripts/deploy.sh"
         '''
       }
