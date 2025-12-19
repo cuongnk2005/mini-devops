@@ -46,6 +46,10 @@ pipeline {
 
     stage('Deploy') {
       steps {
+echo 'Copy file script mới nhất sang thư mục chạy...'
+        // Lệnh này lấy file deploy.sh vừa tải về, ném sang thư mục đích
+        sh 'cp deploy.sh /srv/devops-demo/'
+        sh 'chmod +x /srv/devops-demo/deploy.sh' // Cấp quyền chạy cho chắc
         echo "\u001B[36m[Deploy]\u001B[0m Triển khai web"
         sh '''#!/usr/bin/env bash
           set -euo pipefail
