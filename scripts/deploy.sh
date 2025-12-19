@@ -45,12 +45,13 @@ echo "[$TS] Đang deploy commit: $COMMIT_ID" | tee -a "$LOG_FILE"
 
 # 2) Đồng bộ folder web/ từ repo sang SITE_DIR
 # Nếu code web nằm ở chỗ khác (vd: src/, public/), sửa lại đường dẫn nguồn
-if [ ! -d "$REPO_DIR/web" ]; then
-    echo "[$TS] LỖI: Không tìm thấy thư mục '$REPO_DIR/web' trong repo!" | tee -a "$LOG_FILE"
+# 2) Đồng bộ folder site/ từ repo sang SITE_DIR
+if [ ! -d "$REPO_DIR/site" ]; then
+    echo "[$TS] LỖI: Không tìm thấy thư mục '$REPO_DIR/site' trong repo!" | tee -a "$LOG_FILE"
     exit 1
 fi
 
-rsync -av --delete "$REPO_DIR/web/" "$SITE_DIR/" | tee -a "$LOG_FILE"
+rsync -av --delete "$REPO_DIR/site/" "$SITE_DIR/" | tee -a "$LOG_FILE"
 
 # 3) Chèn timestamp & commit vào index.html (nếu có placeholder)
 if [ -f "$SITE_DIR/index.html" ]; then
