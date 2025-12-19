@@ -7,8 +7,8 @@ set -euo pipefail
 ### CẤU HÌNH (SỬA CHO ĐÚNG MÔI TRƯỜNG CỦA BẠN) ###
 
 # URL repo GitHub của nhóm
-REPO_URL="${REPO_URL:-https://github.com/<user-hoặc-org>/<tên-repo>.git}"
-
+#REPO_URL="${REPO_URL:-https://github.com/<user-hoặc-org>/<tên-repo>.git}"
+REPO_URL="https://github.com/cuongnk2005/mini-devops.git"
 # Nhánh chính
 BRANCH="${BRANCH:-main}"
 
