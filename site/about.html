@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Về chúng tôi - TechStore</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .about-section {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+      line-height: 1.8;
+      color: #333;
+    }
+
+    .about-section h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .about-section p {
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .team-member {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .team-member:hover {
+      transform: translateY(-5px);
+    }
+
+    .member-avatar {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      margin: 0 auto 15px;
+      color: white;
+    }
+
+    .member-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .member-role {
+      color: #667eea;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .member-bio {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .stat-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <a href="index.html" class="logo">🛍️ TechStore</a>
+      <nav>
+        <a href="index.html">Trang chủ</a>
+        <a href="products.html">Sản phẩm</a>
+        <a href="about.html">Về chúng tôi</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Liên hệ</a>
+        <button class="cart-btn" onclick="toggleCart()">
+          🛒 Giỏ hàng
+          <span class="cart-count" id="cart-count">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- About Us Section -->
+    <div class="about-section">
+      <h2>🎯 Về TechStore</h2>
+      <p>
+        TechStore là cửa hàng bán các sản phẩm công nghệ chính hãng hàng đầu tại Việt Nam. 
+        Chúng tôi cam kết cung cấp những sản phẩm chất lượng cao với giá cả hợp lý nhất.
+      </p>
+      <p>
+        Với hơn 10 năm kinh nghiệm trong lĩnh vực bán lẻ công nghệ, TechStore đã trở thành 
+        địa chỉ tin cậy của hàng triệu khách hàng trên toàn quốc.
+      </p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-number">500K+</div>
+        <div class="stat-label">Khách hàng hài lòng</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">1000+</div>
+        <div class="stat-label">Sản phẩm</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Địa điểm</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Hỗ trợ</div>
+      </div>
+    </div>
+
+    <!-- Mission & Vision -->
+    <div class="about-section">
+      <h2>🌟 Sứ mệnh & Tầm nhìn</h2>
+      <p><strong>Sứ mệnh:</strong> Cung cấp những sản phẩm công nghệ chất lượng cao, chính hãng với giá cả phải chăng, 
+      giúp khách hàng tiếp cập dễ dàng với công nghệ mới nhất.</p>
+      <p><strong>Tầm nhìn:</strong> Trở thành cửa hàng công nghệ số một tại Việt Nam, được tin tưởng và yêu thích bởi 
+      hàng triệu khách hàng.</p>
+    </div>
+
+    <!-- Core Values -->
+    <div class="about-section">
+      <h2>💎 Giá trị cốt lõi</h2>
+      <p>
+        <strong>✓ Chất lượng:</strong> Tất cả sản phẩm đều chính hãng 100%, có đầy đủ chứng chỉ và bảo hành.<br><br>
+        <strong>✓ Giá cả hợp lý:</strong> Luôn cạnh tranh giá tốt nhất trên thị trường.<br><br>
+        <strong>✓ Dịch vụ tuyệt vời:</strong> Đội ngũ nhân viên chuyên nghiệp sẵn sàng hỗ trợ 24/7.<br><br>
+        <strong>✓ Giao hàng nhanh:</strong> Giao hàng trong 24-48 giờ toàn bộ thành phố.<br><br>
+        <strong>✓ Tin cậy:</strong> Bảo mật thông tin khách hàng và giao dịch an toàn tuyệt đối.
+      </p>
+    </div>
+
+    <!-- Team Section -->
+    <h2 class="section-title">👥 Đội ngũ chúng tôi</h2>
+    <div class="team-grid">
+      <div class="team-member">
+        <div class="member-avatar">👨‍💼</div>
+        <div class="member-name">Nguyễn Văn A</div>
+        <div class="member-role">CEO & Founder</div>
+        <div class="member-bio">Người sáng lập với 15 năm kinh nghiệm trong lĩnh vực công nghệ.</div>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar">👩‍💼</div>
+        <div class="member-name">Trần Thị B</div>
+        <div class="member-role">Marketing Manager</div>
+        <div class="member-bio">Chuyên gia marketing với chiến lược bán hàng hiệu quả.</div>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar">👨‍🔧</div>
+        <div class="member-name">Lê Minh C</div>
+        <div class="member-role">Technical Support</div>
+        <div class="member-bio">Chuyên gia hỗ trợ kỹ thuật, luôn sẵn sàng giúp đỡ khách hàng.</div>
+      </div>
+      <div class="team-member">
+        <div class="member-avatar">👩‍💻</div>
+        <div class="member-name">Phạm Thu D</div>
+        <div class="member-role">Web Developer</div>
+        <div class="member-bio">Lập trình viên tài năng, xây dựng nền tảng mua sắm trực tuyến.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="index.html">Trang chủ</a>
+        <a href="products.html">Sản phẩm</a>
+        <a href="about.html">Về chúng tôi</a>
+        <a href="contact.html">Liên hệ</a>
+      </div>
+      <div class="footer-social">
+        <a href="#" class="social-link">f</a>
+        <a href="#" class="social-link">𝕏</a>
+        <a href="#" class="social-link">📷</a>
+      </div>
+      <p>&copy; 2025 TechStore. Tất cả quyền được bảo lưu.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

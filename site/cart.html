@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Giỏ hàng - TechStore</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .empty-cart {
+      text-align: center;
+      padding: 60px 20px;
+      color: white;
+    }
+
+    .empty-cart-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+    }
+
+    .empty-cart h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .empty-cart p {
+      font-size: 16px;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+
+    .continue-shopping-btn {
+      background: white;
+      color: #667eea;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .continue-shopping-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .promo-section {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    .promo-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    .promo-input input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .promo-input button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .promo-input button:hover {
+      background: #764ba2;
+    }
+
+    .checkout-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .back-btn {
+      flex: 1;
+      background: #666;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      text-align: center;
+      transition: background 0.3s;
+    }
+
+    .back-btn:hover {
+      background: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <a href="index.html" class="logo">🛍️ TechStore</a>
+      <nav>
+        <a href="index.html">Trang chủ</a>
+        <a href="products.html">Sản phẩm</a>
+        <a href="about.html">Về chúng tôi</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Liên hệ</a>
+        <button class="cart-btn" onclick="toggleCart()" style="opacity: 0.5; cursor: default;">
+          🛒 Giỏ hàng
+          <span class="cart-count" id="cart-count">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h2 class="section-title">🛒 Giỏ hàng của bạn</h2>
+
+    <div class="cart-container">
+      <!-- Cart Items -->
+      <div class="cart-items" id="cart-items">
+        <!-- Cart items will be generated here -->
+      </div>
+
+      <!-- Promo Code Section -->
+      <div class="promo-section" id="promo-section" style="display: none;">
+        <h3 style="color: #667eea; margin-bottom: 15px;">🎁 Mã khuyến mại</h3>
+        <div class="promo-input">
+          <input type="text" placeholder="Nhập mã khuyến mại của bạn...">
+          <button onclick="applyPromo()">Áp dụng</button>
+        </div>
+      </div>
+
+      <!-- Cart Summary -->
+      <div class="cart-summary" id="cart-summary" style="display: none;">
+        <div class="summary-row">
+          <span>Tổng sản phẩm:</span>
+          <span id="item-count">0</span>
+        </div>
+        <div class="summary-row">
+          <span>Tiền hàng:</span>
+          <span id="subtotal">0đ</span>
+        </div>
+        <div class="summary-row">
+          <span>Phí vận chuyển:</span>
+          <span>30.000đ</span>
+        </div>
+        <div class="summary-row">
+          <span>Giảm giá:</span>
+          <span id="discount">0đ</span>
+        </div>
+        <div class="summary-total">
+          <span>Tổng cộng:</span>
+          <span id="cart-total">0đ</span>
+        </div>
+
+        <div class="checkout-actions">
+          <a href="products.html" class="back-btn">← Tiếp tục mua sắm</a>
+          <button class="checkout-btn">Thanh toán</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="index.html">Trang chủ</a>
+        <a href="products.html">Sản phẩm</a>
+        <a href="about.html">Về chúng tôi</a>
+        <a href="contact.html">Liên hệ</a>
+      </div>
+      <div class="footer-social">
+        <a href="#" class="social-link">f</a>
+        <a href="#" class="social-link">𝕏</a>
+        <a href="#" class="social-link">📷</a>
+      </div>
+      <p>&copy; 2025 TechStore. Tất cả quyền được bảo lưu.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (cart.length === 0) {
+        document.getElementById('cart-items').innerHTML = `
+          <div class="empty-cart">
+            <div class="empty-cart-icon">🛒</div>
+            <h2>Giỏ hàng của bạn đang trống</h2>
+            <p>Hãy thêm những sản phẩm yêu thích vào giỏ hàng của bạn!</p>
+            <a href="products.html" class="continue-shopping-btn">Tiếp tục mua sắm</a>
+          </div>
+        `;
+      } else {
+        renderCartItems();
+        document.getElementById('promo-section').style.display = 'block';
+        document.getElementById('cart-summary').style.display = 'block';
+        
+        document.getElementById('item-count').textContent = cart.length;
+        updateCartTotal();
+      }
+    });
+
+    function applyPromo() {
+      showToast('Mã khuyến mại được áp dụng! Bạn được giảm 5%');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog - TechStore</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .blog-header {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .blog-header h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .filter-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .filter-btn.active {
+      background: #667eea;
+      color: white;
+    }
+
+    .filter-btn:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .featured-post {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .featured-post-image {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+      color: white;
+      padding: 40px;
+    }
+
+    .featured-post-content {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .featured-post-badge {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      width: fit-content;
+    }
+
+    .featured-post-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .featured-post-desc {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .read-more-btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+      width: fit-content;
+    }
+
+    .read-more-btn:hover {
+      background: #764ba2;
+    }
+
+    @media (max-width: 768px) {
+      .featured-post {
+        grid-template-columns: 1fr;
+      }
+
+      .featured-post-title {
+        font-size: 22px;
+      }
+
+      .featured-post-image {
+        padding: 30px;
+        font-size: 70px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <a href="index.html" class="logo">🛍️ TechStore</a>
+      <nav>
+        <a href="index.html">Trang chủ</a>
+        <a href="products.html">Sản phẩm</a>
+        <a href="about.html">Về chúng tôi</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Liên hệ</a>
+        <button class="cart-btn" onclick="toggleCart()">
+          🛒 Giỏ hàng
+          <span class="cart-count" id="cart-count">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Blog Header -->
+  <div class="blog-header">
+    <h1>📝 TechStore Blog</h1>
+    <p>Những bài viết hay về công nghệ, mẹo sử dụng sản phẩm và xu hướng mới nhất</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Filter Buttons -->
+    <div class="filter-buttons">
+      <button class="filter-btn active">Tất cả</button>
+      <button class="filter-btn">Đánh giá</button>
+      <button class="filter-btn">Mẹo & Thủ thuật</button>
+      <button class="filter-btn">Tin tức</button>
+      <button class="filter-btn">Hướng dẫn</button>
+    </div>
+
+    <!-- Featured Post -->
+    <div class="featured-post">
+      <div class="featured-post-image">📱</div>
+      <div class="featured-post-content">
+        <div class="featured-post-badge">🔥 BÀI NỔI BẬT</div>
+        <div class="featured-post-title">iPhone 15 Pro - Thiên tài của Apple năm 2024</div>
+        <div class="featured-post-desc">
+          Khám phá chi tiết về iPhone 15 Pro với camera 48MP, chip A18 Pro mạnh mẽ 
+          và thiết kế titanium cao cấp. Đây là sự nâng cấp đáng giá nhất từ Apple.
+        </div>
+        <button class="read-more-btn">Đọc bài viết đầy đủ →</button>
+      </div>
+    </div>
+
+    <!-- Blog Posts Grid -->
+    <section>
+      <h2 class="section-title">📚 Tất cả bài viết</h2>
+      <div class="blog-grid" id="blog-grid">
+        <!-- Blog posts will be generated here -->
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="index.html">Trang chủ</a>
+        <a href="products.html">Sản phẩm</a>
+        <a href="about.html">Về chúng tôi</a>
+        <a href="contact.html">Liên hệ</a>
+      </div>
+      <div class="footer-social">
+        <a href="#" class="social-link">f</a>
+        <a href="#" class="social-link">𝕏</a>
+        <a href="#" class="social-link">📷</a>
+      </div>
+      <p>&copy; 2025 TechStore. Tất cả quyền được bảo lưu.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    renderBlogPosts('blog-grid');
+  </script>
+</body>
+</html>
