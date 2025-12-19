@@ -36,7 +36,7 @@ pipeline {
             echo "APP_DIR: $APP_DIR"
             echo "LOG_DIR: $LOG_DIR"
             docker --version
-            docker compose version
+            docker-compose version
           } >> "$LOG_DIR/setup.log"
 
           printf "\\033[32m[OK]\\033[0m Setup OK\\n"

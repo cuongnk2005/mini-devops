@@ -62,11 +62,11 @@ fi
 if docker ps --format '{{.Names}}' | grep -q "^$CONTAINER_NAME$"; then
     echo "[$TS] Restart container $CONTAINER_NAME..." | tee -a "$LOG_FILE"
     docker restart "$CONTAINER_NAME" >/dev/null 2>&1 || {
-        echo "[$TS] CẢNH BÁO: restart thất bại, thử docker compose up -d" | tee -a "$LOG_FILE"
+        echo "[$TS] CẢNH BÁO: restart thất bại, thử docker-compose up -d" | tee -a "$LOG_FILE"
         docker compose -f /srv/devops-demo/docker/docker-compose.yml up -d
     }
 else
-    echo "[$TS] Container $CONTAINER_NAME chưa chạy, tiến hành docker compose up -d..." | tee -a "$LOG_FILE"
+    echo "[$TS] Container $CONTAINER_NAME chưa chạy, tiến hành docker-compose up -d..." | tee -a "$LOG_FILE"
     docker compose -f /srv/devops-demo/docker/docker-compose.yml up -d
 fi
 
