@@ -4,7 +4,6 @@ pipeline {
   options {
     timestamps()
     ansiColor('xterm')
-    // QUAN TRỌNG: Đã xóa dòng skipDefaultCheckout(true) để Jenkins tự tải code về
   }
 
   environment {
@@ -13,60 +12,61 @@ pipeline {
   }
 
   stages {
-    // Không cần stage Checkout thủ công nữa vì Jenkins sẽ tự làm ở bước đầu
-
     stage('Setup') {
       steps {
-        echo "\u001B[36m[Setup]\u001B[0m Kiểm tra môi trường"
-        sh '''#!/usr/bin/env bash
-          set -eu
-          mkdir -p "$LOG_DIR"
-          
-          # Tạo thư mục chứa script trên server nếu chưa có
-          mkdir -p "$APP_DIR"
-          
-          {
-            echo "== SETUP =="
-            echo "DATE: $(date)"
-            echo "WORKSPACE: $(pwd)"
-            docker-compose version
-          } >> "$LOG_DIR/setup.log"
+        echo "\u001B[36m[Setup]\u001B[0m 1. Chạy script Setup..."
+        
+        // --- SỬA LỖI Ở ĐÂY ---
+        // Phải tạo thư mục cha trước, nếu không lệnh cp sẽ lỗi
+        sh 'mkdir -p /srv/devops-demo' 
+        
+        // Sau đó mới copy file setup vào
+        sh 'cp scripts/setup.sh /srv/devops-demo/setup.sh'
+        sh 'chmod +x /srv/devops-demo/setup.sh'
+        
+        // Chạy file
+        sh '/srv/devops-demo/setup.sh'
+      }
+    }
 
-          printf "\\033[32m[OK]\\033[0m Setup OK\\n"
+    stage('Deploy') {
+      steps {
+        echo "Copy deploy.sh mới nhất sang server..."
+        
+        // Cách viết này của bạn RẤT TỐT (dùng sh block)
+        sh '''#!/usr/bin/env bash
+          set -euo pipefail
+
+          # Đảm bảo thư mục tồn tại (phòng hờ)
+          mkdir -p "$APP_DIR"
+
+          # Copy đè (-f) script deploy mới nhất
+          cp -f scripts/deploy.sh "$APP_DIR/deploy.sh"
+          chmod +x "$APP_DIR/deploy.sh"
+
+          # Truyền biến Workspace cho script deploy biết đường tìm code
+          export WORKSPACE_DIR="$WORKSPACE"
+
+          echo "Đang khởi chạy deploy script..."
+          "$APP_DIR/deploy.sh"
         '''
       }
     }
 
-   stage('Deploy') {
-  steps {
-    echo "Copy deploy.sh mới nhất sang server..."
-
-    sh '''#!/usr/bin/env bash
-      set -euo pipefail
-
-      APP_DIR="/srv/devops-demo"
-      mkdir -p "$APP_DIR"
-
-      cp -f scripts/deploy.sh "$APP_DIR/deploy.sh"
-      chmod +x "$APP_DIR/deploy.sh"
-
-      # Truyền workspace cho deploy.sh
-      export WORKSPACE_DIR="$WORKSPACE"
-
-      "$APP_DIR/deploy.sh"
-    '''
-  }
-}
     stage('Monitor') {
       steps {
         echo "\u001B[36m[Monitor]\u001B[0m Health-check web"
-        // (Giữ nguyên code cũ của bạn đoạn này)
         sh '''#!/usr/bin/env bash
           set -euo pipefail
+          
+          echo "Đợi 5 giây cho Nginx khởi động..."
+          sleep 5
+
+          echo "Kiểm tra kết nối..."
           if curl -fsS http://localhost >/dev/null; then
-             echo "OK"
+             printf "\\033[32m[OK]\u001B[0m Web trả về HTTP 200\\n"
           else
-             echo "FAIL"
+             printf "\\033[31m[FAIL]\u001B[0m Web không phản hồi\\n"
              exit 1
           fi
         '''
@@ -75,13 +75,13 @@ pipeline {
   }
 
   post {
-    // (Giữ nguyên phần post của bạn)
     success {
       echo "\u001B[32m[SUCCESS]\u001B[0m Pipeline hoàn tất"
     }
     failure {
       echo "\u001B[31m[FAILURE]\u001B[0m Pipeline thất bại"
-      // (Giữ nguyên lệnh log lỗi của bạn)
+      // Lệnh in log lỗi nếu cần
+      sh 'tail -n 20 /srv/devops-demo/logs/deploy.log || true'
     }
   }
 }
