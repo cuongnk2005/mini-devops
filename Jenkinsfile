@@ -18,14 +18,14 @@ pipeline {
         
         // --- SỬA LỖI Ở ĐÂY ---
         // Phải tạo thư mục cha trước, nếu không lệnh cp sẽ lỗi
-        sh 'mkdir -p /srv/devops-demo' 
+        sh 'mkdir -p /srv/devops-demo/scripts' 
         
         // Sau đó mới copy file setup vào
         sh 'cp scripts/setup.sh /srv/devops-demo/scripts/setup.sh'
         sh 'chmod +x /srv/devops-demo/scripts/setup.sh'
         
         // Chạy file
-        sh '/srv/devops-demo/setup.sh'
+        sh '/srv/devops-demo/scripts/setup.sh'
       }
     }
 
@@ -33,22 +33,22 @@ pipeline {
       steps {
         echo "Copy deploy.sh mới nhất sang server..."
         
-        // Cách viết này của bạn RẤT TỐT (dùng sh block)
         sh '''#!/usr/bin/env bash
           set -euo pipefail
 
-          # Đảm bảo thư mục tồn tại (phòng hờ)
-          mkdir -p "$APP_DIR"
+          # 1. Tạo thư mục scripts (Đúng)
+          mkdir -p "$APP_DIR/scripts"
 
-          # Copy đè (-f) script deploy mới nhất
+          # 2. Copy vào thư mục scripts (Đúng)
           cp -f scripts/deploy.sh "$APP_DIR/scripts/deploy.sh"
           chmod +x "$APP_DIR/scripts/deploy.sh"
 
-          # Truyền biến Workspace cho script deploy biết đường tìm code
           export WORKSPACE_DIR="$WORKSPACE"
 
           echo "Đang khởi chạy deploy script..."
-          "$APP_DIR/deploy.sh"
+          
+          # 3. SỬA LẠI DÒNG NÀY: Phải gọi đúng đường dẫn file vừa copy
+          "$APP_DIR/scripts/deploy.sh"
         '''
       }
     }
