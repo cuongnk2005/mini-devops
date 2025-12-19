@@ -8,7 +8,7 @@ set -euo pipefail
 # Nhận biến từ Jenkins, nếu không có thì dùng giá trị mặc định
 APP_DIR="${APP_DIR:-/srv/devops-demo}"
 LOG_DIR="${LOG_DIR:-/srv/devops-demo/logs}"
-WEB_PORT="${WEB_PORT:-9999}"
+WEB_PORT="${WEB_PORT:-80}"
 
 # File log riêng cho monitor
 MONITOR_LOG="$LOG_DIR/monitor.log"
