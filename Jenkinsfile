@@ -22,7 +22,7 @@ pipeline {
         
         // Sau đó mới copy file setup vào
         sh 'cp scripts/setup.sh /srv/devops-demo/scripts/setup.sh'
-        sh 'chmod +x /srv/devops-demo/setup.sh'
+        sh 'chmod +x /srv/devops-demo/scripts/setup.sh'
         
         // Chạy file
         sh '/srv/devops-demo/setup.sh'
@@ -42,7 +42,7 @@ pipeline {
 
           # Copy đè (-f) script deploy mới nhất
           cp -f scripts/deploy.sh "$APP_DIR/scripts/deploy.sh"
-          chmod +x "$APP_DIR/deploy.sh"
+          chmod +x "$APP_DIR/scripts/deploy.sh"
 
           # Truyền biến Workspace cho script deploy biết đường tìm code
           export WORKSPACE_DIR="$WORKSPACE"
