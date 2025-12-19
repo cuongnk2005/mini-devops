@@ -21,7 +21,7 @@ pipeline {
         sh 'mkdir -p /srv/devops-demo' 
         
         // Sau đó mới copy file setup vào
-        sh 'cp scripts/setup.sh /srv/devops-demo/setup.sh'
+        sh 'cp scripts/setup.sh /srv/devops-demo/scripts/setup.sh'
         sh 'chmod +x /srv/devops-demo/setup.sh'
         
         // Chạy file
@@ -41,7 +41,7 @@ pipeline {
           mkdir -p "$APP_DIR"
 
           # Copy đè (-f) script deploy mới nhất
-          cp -f scripts/deploy.sh "$APP_DIR/deploy.sh"
+          cp -f scripts/deploy.sh "$APP_DIR/scripts/deploy.sh"
           chmod +x "$APP_DIR/deploy.sh"
 
           # Truyền biến Workspace cho script deploy biết đường tìm code
