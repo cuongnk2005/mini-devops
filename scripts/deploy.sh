@@ -57,7 +57,7 @@ if [ -f "$SITE_DIR/index.html" ]; then
   sed -i "s/__COMMIT__/$COMMIT_ID/g" "$SITE_DIR/index.html" || true
 fi
 
-# Restart nginx container (hoặc compose up)
+# Restart nginx container
 if docker ps --format '{{.Names}}' | grep -q "^$CONTAINER_NAME$"; then
   echo "[$TS] Restart container $CONTAINER_NAME..." | tee -a "$LOG_FILE"
   docker restart "$CONTAINER_NAME" >/dev/null 2>&1 || {

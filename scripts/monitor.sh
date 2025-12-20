@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-# Dừng script ngay nếu có lỗi (set -e) hoặc biến chưa định nghĩa (set -u)
 set -euo pipefail
 
 # --- CẤU HÌNH ---
