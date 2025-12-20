@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# scripts/monitor.sh - Kiểm tra sức khỏe website (Health Check)
 
 # Dừng script ngay nếu có lỗi (set -e) hoặc biến chưa định nghĩa (set -u)
 set -euo pipefail
@@ -14,7 +13,7 @@ WEB_PORT="${WEB_PORT:-80}"
 MONITOR_LOG="$LOG_DIR/monitor.log"
 TARGET_URL="http://localhost:$WEB_PORT"
 
-echo "--- [MONITOR] Starting Health Check ---"
+echo "--- [MONITOR] ---"
 
 # 1. Đợi Web Server khởi động
 # Vì container vừa bật lên cần vài giây để Nginx sẵn sàng nhận kết nối
@@ -54,6 +53,5 @@ else
     echo "--- Last 10 lines of container logs ---"
     docker logs --tail 10 devopsdemo-nginx || true
     
-    # Báo cho Jenkins biết là LỖI (Dừng pipeline)
     exit 1
 fi
